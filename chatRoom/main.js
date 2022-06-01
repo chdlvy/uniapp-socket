@@ -3,7 +3,7 @@ import VueSocketio from 'vue-socket.io'
 import socketio from '@hyoga/uni-socket.io'
 Vue.use(
   new VueSocketio({
-    connection: socketio.io('http://localhost:3000', {
+    connection: socketio.io('ws://localhost:3000', {
       transports: ['websocket', 'xhr-polling', 'jsonp-polling']
     }),
     debug: false
