@@ -18,26 +18,9 @@
 <script>
 	export default {
 		name: "chatView",
-		data() {
-			return {
-				obj:[],
-				chat_record:[{
-					isMe: true,
-					msg: '阿萨大大撒旦撒旦阿萨大大撒旦撒旦阿萨大大撒旦撒旦阿萨大大撒旦撒旦'
-				},
-				{
-					isMe: false,
-					msg: '你好a阿斯顿撒大大实打实大大是啊实打实大苏打实打实的 '
-				},
-				{
-					isMe: true,
-					msg: '你好'
-				},
-				{
-					isMe: false,
-					msg: '挺好'
-				}]
-			}
+		props: {
+			chat_record:Array,
+			friend:Object
 		}
 
 	}
@@ -61,7 +44,6 @@
 	.left-msg,
 	.right-msg {
 		position: relative;
-		clear: both;
 		padding: 8px 20px 8px 10px;
 		margin-bottom: 20px;
 		font: 14px 'Noto Sans', sans-serif;
@@ -72,6 +54,7 @@
 		word-wrap: break-word;
 		word-break: normal;
 		color: #0EC879;
+		
 	}
 
 	.right,
@@ -84,6 +67,7 @@
 		display: flex;
 		flex-direction: row-reverse;
 		justify-content: flex-start;
+		margin-right: 2%;
 		
 	}
 	.right-avatar,
@@ -92,18 +76,13 @@
 		border-radius: 50%;
 		width: 35px;
 		height: 35px;
-	}
-
-
-	.right-avatar {
-		right: 2%;
+		min-width: 35px;
 	}
 
 	.right-msg {
 		animation: show-chat-even 0.15s 1 ease-in;
-	/* 	float: right;
-		margin-right: 15%; */
 		position: relative;
+		margin-right: 15px;
 	}
 
 	.right-msg::after {
@@ -111,20 +90,22 @@
 		width: 0px;
 		height: 0px;
 		border: 10px solid transparent;
-		border-left: 10px solid red;
+		border-left: 10px solid rgba(25, 147, 147, 0.2);
 		position: absolute;
-		top: 20%;
-		/* right: -20px; */
+		right: -20px;
+		top: 5px;
 	}
 
-	.left-avatar {
-		left: 2%;
+
+	.left {
+		display: flex;
+		justify-content: flex-start;
+		margin-left: 2%;
 	}
 
 	.left-msg {
 		animation: show-chat-even 0.15s 1 ease-in;
-		float: left;
-		margin-left: 15%;
+		margin-left: 15px;
 	}
 
 	.left-msg::before {
@@ -134,7 +115,7 @@
 		border: 10px solid transparent;
 		border-right: 10px solid rgba(25, 147, 147, 0.2);
 		position: absolute;
-		top: 20%;
-		left: -31%;
+		left: -20px;
+		top: 5px;
 	}
 </style>
