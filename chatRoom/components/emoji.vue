@@ -89,7 +89,7 @@
 					let em = {},
 					emChar = this.emojiChar.split("-");
 					let emojis = []
-					this.emoji.forEach(function(v, i) {
+					this.emoji.forEach(function(v, i) { 
 					em = {
 							char: emChar[i],
 							emoji: v

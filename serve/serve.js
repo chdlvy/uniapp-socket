@@ -1,8 +1,11 @@
 var app = require('express')();
 var http = require('http').createServer(app);
+let router = require('./router')
 var io = require('socket.io')(http, {
 	cors: true
 });
+
+app.use(router)
 
 
 let freeList = []
