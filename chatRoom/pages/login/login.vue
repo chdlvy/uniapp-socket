@@ -4,15 +4,14 @@
 		<el-main>
 			<el-tabs v-model="activeName" @tab-click="handleClick">
 				<el-tab-pane label="登录" name="first">
-					<el-form ref="form" :model="login_in" label-width="80px" label-position="right">
-						<el-form-item label="账号">
-							<el-input v-model="login_in.account" placeholder="请输入账号"></el-input>
+					<el-form ref="form" :rules="rules" :model="login_in" label-width="80px" label-position="right">
+						<el-form-item label="账号" prop="account">
+							<el-input v-model.number="login_in.account" placeholder="请输入账号"></el-input>
 						</el-form-item>
-						<el-form-item label="密码">
+						<el-form-item label="密码" prop="password">
 							<el-input placeholder="请输入密码" v-model="login_in.password" show-password></el-input>
 						</el-form-item>
 					</el-form>
-
 					<el-button class="btn" type="primary" @click="login">登录</el-button>
 				</el-tab-pane>
 				<el-tab-pane label="注册" name="second">
@@ -93,7 +92,17 @@
 		},
 		methods: {
 			register() {
-				
+				let {account,password,nick_name} = this.login_up
+				let userAccount = new UserAccount(account,password,nick_name)
+				userAccount
+				.register()
+				.then(res=> {
+						userAccount.login(account,password)
+					}
+				).catch(rej=> {
+					console.log(注册失败);
+				})
+				;
 			},
 			handleClick(tab, event) {
 				console.log(tab, event);
