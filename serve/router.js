@@ -25,15 +25,24 @@ let ID = 0;
 
 app.post('/login',(req,res)=> {
 	console.log(req.body);
-	
-	// 设置token
-	let token = jwt.sign({
-		username:req.body.account
-	},"azrael",{
-		expiresIn: 10
+	let arr = []
+	fs.readFile('./data/user_info.json',(err,data)=> {
+		arr = JSON.parse(data.toString());
 	})
-	console.log(token);
-	res.send(token)
+	let find = arr.find(item=> item.account===req.body.account && item.password===req.body.password)
+	if(find) {
+		// 设置token
+		let token = jwt.sign({
+			account:req.body.account
+		},"azrael",{
+			expiresIn: 10
+		})
+		res.send(token)
+	}
+	else {
+		res.send('账号未注册')
+	}
+	
 })
 app.post('/register',(req,res)=> {
 	let account = req.body.account;

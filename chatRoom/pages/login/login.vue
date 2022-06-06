@@ -91,25 +91,33 @@
 
 		},
 		methods: {
+			login() {
+				localStorage.getItem('token')
+				let userAccount = new UserAccount(account,password,nick_name)
+				// 先验证token
+			},
+			
 			register() {
 				let {account,password,nick_name} = this.login_up
 				let userAccount = new UserAccount(account,password,nick_name)
 				userAccount
 				.register()
 				.then(res=> {
-						userAccount.login(account,password)
+						userAccount.login().then(res=> {
+							localStorage.setItem('token',res)
+						})
 					}
 				).catch(rej=> {
-					console.log(注册失败);
+					console.log(rej);
 				})
 				;
 			},
 			handleClick(tab, event) {
-				console.log(tab, event);
+				// console.log(tab, event);
 			},
 		},
 		onLoad() {
-			console.log(new UserAccount());
+			// console.log(new UserAccount());
 		}
 	}
 </script>
