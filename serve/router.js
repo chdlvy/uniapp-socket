@@ -3,6 +3,7 @@ let bodyParser = require('body-parser');
 let app = express()
 let jwt = require("jsonwebtoken")
 let fs = require('fs')
+const { log } = require("console");
 
 
 // 设置跨域
@@ -25,12 +26,17 @@ let ID = 0;
 
 app.post('/login',(req,res)=> {
 	console.log(req.body);
+	
+	// 检查账号密码对不对
 	let arr = []
 	fs.readFile('./data/user_info.json',(err,data)=> {
 		arr = JSON.parse(data.toString());
+		console.log(arr);
 	})
+	
 	let find = arr.find(item=> item.account===req.body.account && item.password===req.body.password)
 	if(find) {
+		console.log('find');
 		// 设置token
 		let token = jwt.sign({
 			account:req.body.account
@@ -51,7 +57,7 @@ app.post('/register',(req,res)=> {
 	
 	let arr = []
 	// 读取user_info.json检查用户是否已经注册过了
-	fs.readFile('./data/user_info.json',(err,data)=> {
+	fs.readFileSync('./data/user_info.json',(err,data)=> {
 		if(err) {
 			console.log(err);
 		}
@@ -59,7 +65,6 @@ app.post('/register',(req,res)=> {
 		
 		console.log(arr);
 	})
-	
 	// 计划放入数据库================================================
 	let user_info = {
 		account,
@@ -68,6 +73,8 @@ app.post('/register',(req,res)=> {
 		userName
 	}
 	arr.push(user_info)
+	
+	console.log(arr)
 	// 注册的用户消息放入user_info.json中
 	fs.writeFile('./data/user_info.json',JSON.stringify(arr),err=> {
 		console.log(err)

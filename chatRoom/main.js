@@ -32,3 +32,19 @@ export function createApp() {
   }
 }
 // #endif
+
+let xhr = new XMLHttpRequest()
+xhr.open('get', 'http://localhost:3000/verify', false)
+			xhr.onreadystatechange = function() {
+				if (xhr.readyState == 4) {
+					if (xhr.status >= 200 && xhr.status < 300) {
+						console.log(xhr.responseText);
+					}else {
+						console.log('fail')
+					}
+
+				}
+			}
+xhr.send({
+	token:localStorage.getItem('token')
+})

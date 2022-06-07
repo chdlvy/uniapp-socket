@@ -92,8 +92,11 @@
 		},
 		methods: {
 			login() {
-				localStorage.getItem('token')
+				let {account,password,nick_name} = this.login_in
 				let userAccount = new UserAccount(account,password,nick_name)
+				userAccount.login().then(res=> {
+					localStorage.setItem('token',res)
+				})
 				// 先验证token
 			},
 			
