@@ -28,11 +28,10 @@
 						<el-form-item label="确认密码"  prop="repeat_psw">
 							<el-input placeholder="请输入密码" v-model="login_up.repeat_psw" show-password>
 							</el-input>
-							<text v-show="isRepeat" class="repeat">密码不一致！</text>
 						</el-form-item>
 					</el-form>
 
-					<el-button class="btn" type="primary" @click="register">注册</el-button>
+					<el-button class="btn" type="primary" :disabled="isRegister" @click="register">注册</el-button>
 				</el-tab-pane>
 			</el-tabs>
 
@@ -47,6 +46,7 @@
 	} from '../user.js'
 	export default {
 		data() {
+			// 判断密码是否相等
 			var validatePass2 = (rule, value, callback) => {
 			        if (value === '') {
 			          callback(new Error('请再次输入密码'));
@@ -87,17 +87,27 @@
 			}
 		},
 		computed: {
-
+			// 密码和重复密码不相等,密码为空的时候不能点击注册按钮
+			isRegister() {
+				return this.login_up.password!==this.login_up.repeat_psw || this.login_up.password ==''
+			}
 
 		},
 		methods: {
 			login() {
 				let {account,password,nick_name} = this.login_in
 				let userAccount = new UserAccount(account,password,nick_name)
+				// 收到token表示登录成功
 				userAccount.login().then(res=> {
+					console.log(res);
 					localStorage.setItem('token',res)
+					uni.navigateTo({
+						url: 'pages/index'
+					});
+				}).catch(rej=> {
+					console.log('登录失败，请注册');
 				})
-				// 先验证token
+				
 			},
 			
 			register() {
@@ -145,12 +155,5 @@
 	.btn {
 		display: block;
 		margin: 0 auto;
-	}
-
-	.repeat {
-		display: block;
-		margin-top: -10px;
-		color: red;
-		font-size: 10px;
 	}
 </style>
