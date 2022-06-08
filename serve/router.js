@@ -38,9 +38,14 @@ app.post('/login',(req,res)=> {
 		let token = jwt.sign({
 			account:req.body.account
 		},"azrael",{
-			expiresIn: 10
+			expiresIn: 10000
 		})
-		res.send(token)
+		let result = {
+			token,
+			user_info:find
+		}
+		console.log(result)
+		res.send(result)
 	}
 	else {
 		res.send('账号未注册')
@@ -50,7 +55,7 @@ app.post('/login',(req,res)=> {
 app.post('/register',(req,res)=> {
 	let account = req.body.account;
 	let password = req.body.password;
-	let userName = req.body.userName;
+	let nickName = req.body.nickName;
 	
 	let arr = []
 	// 读取user_info.json检查用户是否已经注册过了
@@ -61,7 +66,7 @@ app.post('/register',(req,res)=> {
 		account,
 		password,
 		userId:++ID,
-		userName
+		nickName
 	}
 	arr.push(user_info)
 	

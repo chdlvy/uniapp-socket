@@ -7,10 +7,9 @@ export class User {
 	}
 }
 export class UserAccount {
-	constructor(account, password, nickName) {
+	constructor(account, password) {
 		this.account = account;
 		this.password = password;
-		this.nickName = nickName;
 		this.xhr = new XMLHttpRequest()
 	}
 	login() {
@@ -35,7 +34,7 @@ export class UserAccount {
 		return Pro
 	}
 	// 注册
-	register() {
+	register(nickName) {
 		const Pro = new Promise((res, rej) => {
 
 			let _this = this;
@@ -52,7 +51,7 @@ export class UserAccount {
 				}
 			}
 
-			this.xhr.send(`account=${this.account}&password=${this.password}&nickName=${this.nickName}`);
+			this.xhr.send(`account=${this.account}&password=${this.password}&nickName=${nickName}`);
 
 		})
 		return Pro

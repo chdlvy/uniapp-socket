@@ -100,10 +100,10 @@
 				let userAccount = new UserAccount(account,password,nick_name)
 				// 收到token表示登录成功
 				userAccount.login().then(res=> {
-					console.log(uni);
-					localStorage.setItem('token',res)
-					this.__proto__.prototype.User = new User(account,nick_name,'img')
-					console.log(this.__proto__);
+					res = JSON.parse(res)
+					// 保存用户信息和token
+					localStorage.setItem('token',res.token);
+					localStorage.setItem('user_info',res.user_info);
 					uni.navigateTo({
 						url: '../chatList/chatList'
 					});
@@ -115,17 +115,18 @@
 			
 			register() {
 				let {account,password,nick_name} = this.login_up
-				let userAccount = new UserAccount(account,password,nick_name)
+				let userAccount = new UserAccount(account,password)
 				userAccount
-				.register()
+				.register(nick_name)
 				.then(res=> {
 						userAccount.login().then(res=> {
 							// 保存token
-							localStorage.setItem('token',res)
-							this.User = new User(account,nick_name,'img')
+							localStorage.setItem('token',res.token)
+							// 保存用户信息
+							localStorage.setItem('user_info',res.user_info);
 							// 跳转
 							uni.navigateTo({
-								url: 'pages/chatList'
+								url: '../chatList/chatList'
 							});
 						})
 					}

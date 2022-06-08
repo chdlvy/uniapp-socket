@@ -15,7 +15,8 @@
 	// import {} from '../user.js'
 	export default {
 		onLoad() {
-			console.log(this.__proto__);
+			let obj = localStorage.getItem('user_info')
+			console.log(obj);
 		},
 		methods: {
 			toChatRoom() {
