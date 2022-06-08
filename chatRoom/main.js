@@ -3,6 +3,11 @@ import VueSocketio from 'vue-socket.io'
 import socketio from '@hyoga/uni-socket.io'
 import ElementUi from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
+import {User} from './pages/user.js'
+
+// 定义全局变量，存放用户信息
+Vue.prototype.User = null
+
 Vue.use(
   new VueSocketio({
     connection: socketio.io('ws://localhost:3000', {

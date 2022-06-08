@@ -42,7 +42,8 @@
 
 <script>
 	import {
-		UserAccount
+		UserAccount,
+		User
 	} from '../user.js'
 	export default {
 		data() {
@@ -99,10 +100,12 @@
 				let userAccount = new UserAccount(account,password,nick_name)
 				// 收到token表示登录成功
 				userAccount.login().then(res=> {
-					console.log(res);
+					console.log(uni);
 					localStorage.setItem('token',res)
+					this.__proto__.prototype.User = new User(account,nick_name,'img')
+					console.log(this.__proto__);
 					uni.navigateTo({
-						url: 'pages/index'
+						url: '../chatList/chatList'
 					});
 				}).catch(rej=> {
 					console.log('登录失败，请注册');
@@ -117,7 +120,13 @@
 				.register()
 				.then(res=> {
 						userAccount.login().then(res=> {
+							// 保存token
 							localStorage.setItem('token',res)
+							this.User = new User(account,nick_name,'img')
+							// 跳转
+							uni.navigateTo({
+								url: 'pages/chatList'
+							});
 						})
 					}
 				).catch(rej=> {
