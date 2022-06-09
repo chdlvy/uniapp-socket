@@ -22,6 +22,7 @@ app.use(bodyParser.urlencoded({extended:true}))
 app.use(bodyParser.json())
 
 let ID = 0;
+let friendList = [] //保存每个用户的好友列表
 
 app.post('/login',(req,res)=> {
 	console.log(req.body);
@@ -56,19 +57,24 @@ app.post('/register',(req,res)=> {
 	let account = req.body.account;
 	let password = req.body.password;
 	let nickName = req.body.nickName;
-	
+	let userId = ++ID
 	let arr = []
 	// 读取user_info.json检查用户是否已经注册过了
 	let data = fs.readFileSync('./data/user_info.json')
 	arr = JSON.parse(data.toString());
+	
 	// 计划放入数据库================================================
 	let user_info = {
 		account,
 		password,
-		userId:++ID,
+		userId,
 		nickName
 	}
+	
 	arr.push(user_info)
+	
+	// 初始化好友列表
+	friendList[userId] = []
 	
 	console.log(arr)
 	// 注册的用户消息放入user_info.json中
@@ -76,6 +82,21 @@ app.post('/register',(req,res)=> {
 		console.log(err)
 	})
 	res.send('success')
+})
+// 返回好友列表
+app.get('getFriend',(req,res)=> {
+	let userId = req.query.userId
+	res.send(friendList[userId])
+})
+
+// 添加好友
+app.post('addFriend',(req,res)=> {
+	let friend_info = req.query.friend_info
+	let userId = req.query.userId
+	// 添加到总好友表中
+	friendList[userId].push(friend_info)
+	// 返回添加之后的好友列表
+	res.send(friendList[userId])
 })
 
 // 验证token

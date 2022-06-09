@@ -61,13 +61,47 @@ export class UserAccount {
 	}
 }
 export class Friend {
-	constructor() {
+	constructor(User) {
 		this.friendList = []
+		this.userId = User.userId
+		this.xhr = new XMLHttpRequest()
 	}
 
-	addFriend(User) {
-		// 对方加到自己好友表
-		this.friendList.push(User)
+	getFriend() {
+		let _this = this;
+		this.xhr.open('get', 'http://localhost:3000/getFriend', false)
+		this.xhr.onreadystatechange = function() {
+			if (_this.xhr.readyState == 4) {
+				if (_this.xhr.status >= 200 && _this.xhr.status < 300) {
+					_this.xhr.responseText // 获取响应数据(以文本形式)
+				} else {
+					console.log('fail'); // 注册失败
+		
+				}
+			}
+		}
+		
+		this.xhr.send(this.UserId);
+	}
+	
+	// 用朋友的id会不会更好?-------------
+	addFriend(friend_info) {
+		
+		this.xhr.open('post', 'http://localhost:3000/addFriend', false)
+		this.xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded')
+		this.xhr.onreadystatechange = function() {
+			if (_this.xhr.readyState == 4) {
+				if (_this.xhr.status >= 200 && _this.xhr.status < 300) {
+					res(_this.xhr.responseText) // 获取响应数据(以文本形式)
+				} else {
+					rej('fail') // 注册失败
+		
+				}
+			}
+		}
+		this.xhr.send(`account=${this.account}&password=${this.password}&nickName=${nickName}`);
+		
+		
 	}
 	delFriend(User) {
 		for (let i = 0; i < this.friendList.length; i++) {
