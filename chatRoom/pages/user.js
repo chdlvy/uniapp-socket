@@ -3,7 +3,7 @@ export class User {
 		this.userId = userId;
 		this.name = name;
 		this.avatar = avatar;
-		new Friend()
+		new Friend({userId,name,avatar})
 	}
 }
 export class UserAccount {
@@ -64,6 +64,7 @@ export class Friend {
 	constructor(User) {
 		this.friendList = []
 		this.userId = User.userId
+		this.User = User
 		this.xhr = new XMLHttpRequest()
 	}
 
@@ -81,33 +82,32 @@ export class Friend {
 			}
 		}
 		
-		this.xhr.send(this.UserId);
+		this.xhr.send(this.userId);
 	}
 	
-	// 用朋友的id会不会更好?-------------
-	addFriend(friend_info) {
+	
+	addFriend(friendId) {
 		
+		const Pro = new Promise((res, rej) => {
 		this.xhr.open('post', 'http://localhost:3000/addFriend', false)
 		this.xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded')
 		this.xhr.onreadystatechange = function() {
 			if (_this.xhr.readyState == 4) {
 				if (_this.xhr.status >= 200 && _this.xhr.status < 300) {
-					res(_this.xhr.responseText) // 获取响应数据(以文本形式)
+					res(_this.xhr.responseText) // 获取响应数据(以文本形式)：添加好友之后的好友列表
 				} else {
-					rej('fail') // 注册失败
+					rej('addFriend fail') // 添加好友失败
 		
 				}
 			}
 		}
-		this.xhr.send(`account=${this.account}&password=${this.password}&nickName=${nickName}`);
+		this.xhr.send(`friendId=${friendId}&userId=${this.userId}`);
 		
+		})
+		return Pro
 		
 	}
-	delFriend(User) {
-		for (let i = 0; i < this.friendList.length; i++) {
-			if (User === this.friendList[i]) {
-				this.friendList.splice(i, 1);
-			}
-		}
+	delFriend() {
+		
 	}
 }

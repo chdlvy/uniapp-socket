@@ -23,6 +23,7 @@ app.use(bodyParser.json())
 
 let ID = 0;
 let friendList = [] //保存每个用户的好友列表
+let userList = [] //保存每个用户的信息
 
 app.post('/login',(req,res)=> {
 	console.log(req.body);
@@ -75,6 +76,8 @@ app.post('/register',(req,res)=> {
 	
 	// 初始化好友列表
 	friendList[userId] = []
+	// 存放用户个人信息
+	userList[userId] = user_info
 	
 	console.log(arr)
 	// 注册的用户消息放入user_info.json中
@@ -91,10 +94,13 @@ app.get('getFriend',(req,res)=> {
 
 // 添加好友
 app.post('addFriend',(req,res)=> {
-	let friend_info = req.query.friend_info
+	let arr = []
+	let data = fs.readFileSync('./data/user_info.json')
+	arr = JSON.parse(data.toString());
+	let friendId = req.query.friendId
 	let userId = req.query.userId
-	// 添加到总好友表中
-	friendList[userId].push(friend_info)
+	// 把好友添加到总好友表中
+	friendList[userId].push(userList[friendId])
 	// 返回添加之后的好友列表
 	res.send(friendList[userId])
 })
