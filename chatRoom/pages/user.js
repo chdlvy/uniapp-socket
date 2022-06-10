@@ -69,6 +69,7 @@ export class Friend {
 	}
 
 	getFriend() {
+		const Pro = new Promise((res, rej) => {
 		let _this = this;
 		this.xhr.open('get', 'http://localhost:3000/getFriend', false)
 		this.xhr.onreadystatechange = function() {
@@ -83,6 +84,8 @@ export class Friend {
 		}
 		
 		this.xhr.send(this.userId);
+		})
+		return Pro
 	}
 	
 	
@@ -107,7 +110,20 @@ export class Friend {
 		return Pro
 		
 	}
-	delFriend() {
+	delFriend(friendId) {
+		let _this = this;
+		this.xhr.open('get', 'http://localhost:3000/delFriend', false)
+		this.xhr.onreadystatechange = function() {
+			if (_this.xhr.readyState == 4) {
+				if (_this.xhr.status >= 200 && _this.xhr.status < 300) {
+					console.log('del success'); // 获取响应数据(以文本形式)
+				} else {
+					console.log('del fail'); // 注册失败
 		
+				}
+			}
+		}
+		
+		this.xhr.send(friendId);
 	}
 }

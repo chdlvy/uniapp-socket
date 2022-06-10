@@ -105,6 +105,12 @@ app.post('addFriend',(req,res)=> {
 	res.send(friendList[userId])
 })
 
+app.get('delFriend',(req,res)=> {
+	let friendId = req.query.friendId;
+	let userId = req.query.userId
+	friendList[userId].indexOf()
+})
+
 // 验证token
 app.get("/verify",(req,res)=> {
 	let token = req.query.token;
