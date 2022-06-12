@@ -57,7 +57,11 @@ export class UserAccount {
 		return Pro
 	}
 	destory() {
-
+		
+		// 测试封装的函数
+		requestUrl('get','test','id=1').then(res=> {
+			console.log(res);
+		})
 	}
 }
 export class Friend {
@@ -126,4 +130,40 @@ export class Friend {
 		
 		this.xhr.send(friendId);
 	}
+}
+
+function requestUrl(method,url,data) {
+	let baseUrl = 'http://localhost:3000/'
+	return new Promise((reslove,reject)=> {
+		let xhr = new XMLHttpRequest()
+		if(method==='get' || 'GET') {
+			let _url = baseUrl+url+'?'+data
+			xhr.open(method,_url,true)
+			xhr.onreadystatechange = function() {
+				if (xhr.readyState == 4) {
+					if (xhr.status >= 200 && xhr.status < 300) {
+						reslove(xhr.responseText) // 获取响应数据(以文本形式)：添加好友之后的好友列表
+					} else {
+						reject()
+					}
+				}
+			}
+			xhr.send()
+		}
+		else {
+			let _url = baseUrl+url
+			xhr.open(method,_url,true)
+			xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded')
+			xhr.onreadystatechange = function() {
+				if (xhr.readyState == 4) {
+					if (xhr.status >= 200 && xhr.status < 300) {
+						reslove(xhr.responseText) // 获取响应数据(以文本形式)：添加好友之后的好友列表
+					} else {
+						reject()
+					}
+				}
+			}
+			xhr.send(data)
+		}
+	})
 }

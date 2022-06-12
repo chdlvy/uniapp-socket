@@ -110,6 +110,7 @@
 				}).catch(rej=> {
 					console.log('登录失败，请注册');
 				})
+				userAccount.destory()
 				
 			},
 			
