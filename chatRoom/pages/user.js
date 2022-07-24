@@ -3,7 +3,7 @@ export class User {
 		this.userId = userId;
 		this.name = name;
 		this.avatar = avatar;
-		new Friend({userId,name,avatar})
+		new Friends({userId,name,avatar})
 	}
 }
 export class UserAccount {
@@ -14,80 +14,76 @@ export class UserAccount {
 	}
 	login() {
 		// 发送登录请求，登录成功返回token
-		const Pro = new Promise((res, rej) => {
-			let _this = this;
-			this.xhr.open('post', 'http://localhost:3000/login', false)
-			this.xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-			this.xhr.onreadystatechange = function() {
-				if (_this.xhr.readyState == 4) {
-					if (_this.xhr.status >= 200 && _this.xhr.status < 300) {
-						res(_this.xhr.responseText)
-					}else {
-						rej('fail')
-					}
-
-				}
-			}
-
-			this.xhr.send(`account=${this.account}&password=${this.password}`);
+		const Pro = new Promise((reslove, reject) => {
+			
+			let data = `account=${this.account}&password=${this.password}`
+			requestUrl('post','login',data).then(res=> {
+				console.log(res);
+				reslove(res)
+			}).catch(rej=> {
+				reject('fail')
+			})
 		})
 		return Pro
 	}
 	// 注册
 	register(nickName) {
-		const Pro = new Promise((res, rej) => {
-
-			let _this = this;
-			this.xhr.open('post', 'http://localhost:3000/register', false)
-			this.xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded')
-			this.xhr.onreadystatechange = function() {
-				if (_this.xhr.readyState == 4) {
-					if (_this.xhr.status >= 200 && _this.xhr.status < 300) {
-						res(_this.xhr.responseText) // 获取响应数据(以文本形式)
-					} else {
-						rej('fail') // 注册失败
-
-					}
-				}
-			}
-
-			this.xhr.send(`account=${this.account}&password=${this.password}&nickName=${nickName}`);
+		const Pro = new Promise((reslove, reject) => {
+			
+			let data = `account=${this.account}&password=${this.password}&nickName=${nickName}`
+			requestUrl('post','register',data).then(res=> {
+				reslove()
+			}).catch(rej=> {
+				reject('fail')
+			})
 
 		})
 		return Pro
 	}
 	destory() {
 		
-		// 测试封装的函数
-		requestUrl('get','test','id=1').then(res=> {
-			console.log(res);
-		})
 	}
 }
-export class Friend {
+
+
+
+export class Friends {
 	constructor(User) {
 		this.friendList = []
 		this.userId = User.userId
-		this.User = User
 		this.xhr = new XMLHttpRequest()
 	}
-
-	getFriend() {
+	
+	test() {
 		const Pro = new Promise((res, rej) => {
 		let _this = this;
-		this.xhr.open('get', 'http://localhost:3000/getFriend', false)
-		this.xhr.onreadystatechange = function() {
-			if (_this.xhr.readyState == 4) {
-				if (_this.xhr.status >= 200 && _this.xhr.status < 300) {
-					_this.xhr.responseText // 获取响应数据(以文本形式)
+		let xhr = new XMLHttpRequest()
+		xhr.open('get', 'http://localhost:3000/test?id=1', false)
+		xhr.send();
+		xhr.onreadystatechange = function() {
+			if (xhr.readyState == 4) {
+				if (xhr.status >= 200 && xhr.status < 300) {
+					console.log();
+					res(xhr.responseText) // 获取响应数据(以文本形式)：添加好友之后的好友列表
 				} else {
-					console.log('fail'); // 注册失败
+					rej('test fail') // 添加好友失败
 		
 				}
 			}
 		}
 		
-		this.xhr.send(this.userId);
+		})
+		return Pro
+	}
+
+	getFriend() {
+		const Pro = new Promise((reslove, reject) => {
+		let data = 'userId='+this.userId
+		requestUrl('get','getFriend',data).then(res=> {
+			reslove(res)
+		}).catch(rej=> {
+			reject('fail')
+		})
 		})
 		return Pro
 	}
@@ -96,6 +92,7 @@ export class Friend {
 	addFriend(friendId) {
 		
 		const Pro = new Promise((res, rej) => {
+		let _this = this
 		this.xhr.open('post', 'http://localhost:3000/addFriend', false)
 		this.xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded')
 		this.xhr.onreadystatechange = function() {
@@ -136,9 +133,9 @@ function requestUrl(method,url,data) {
 	let baseUrl = 'http://localhost:3000/'
 	return new Promise((reslove,reject)=> {
 		let xhr = new XMLHttpRequest()
-		if(method==='get' || 'GET') {
+		if(method==='get' || method === 'GET') {
 			let _url = baseUrl+url+'?'+data
-			xhr.open(method,_url,true)
+			xhr.open(method,_url,false)
 			xhr.onreadystatechange = function() {
 				if (xhr.readyState == 4) {
 					if (xhr.status >= 200 && xhr.status < 300) {
@@ -152,7 +149,7 @@ function requestUrl(method,url,data) {
 		}
 		else {
 			let _url = baseUrl+url
-			xhr.open(method,_url,true)
+			xhr.open(method,_url,false)
 			xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded')
 			xhr.onreadystatechange = function() {
 				if (xhr.readyState == 4) {
